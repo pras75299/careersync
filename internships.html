@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Internships - Bharat Internz</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Bharat Internz</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="internships.html" class="nav-link active">Browse Internships</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Find Your Perfect Internship</h1>
+            <p>Discover thousands of opportunities from top companies</p>
+        </div>
+    </section>
+
+    <!-- Search and Filter Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Search by job title, company, or skills...">
+                    <button class="search-btn" onclick="searchInternships()">Search</button>
+                </div>
+            </div>
+
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label>Category</label>
+                    <select id="category-filter">
+                        <option value="">All Categories</option>
+                        <option value="technology">Technology</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="design">Design</option>
+                        <option value="business">Business</option>
+                        <option value="data-science">Data Science</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Location</label>
+                    <select id="location-filter">
+                        <option value="">All Locations</option>
+                        <option value="remote">Remote</option>
+                        <option value="bangalore">Bangalore</option>
+                        <option value="mumbai">Mumbai</option>
+                        <option value="delhi">Delhi</option>
+                        <option value="pune">Pune</option>
+                        <option value="chennai">Chennai</option>
+                        <option value="hyderabad">Hyderabad</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Type</label>
+                    <select id="type-filter">
+                        <option value="">All Types</option>
+                        <option value="remote">Remote</option>
+                        <option value="hybrid">Hybrid</option>
+                        <option value="on-site">On-site</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Duration</label>
+                    <select id="duration-filter">
+                        <option value="">All Durations</option>
+                        <option value="1-2 months">1-2 months</option>
+                        <option value="3 months">3 months</option>
+                        <option value="4-6 months">4-6 months</option>
+                        <option value="6+ months">6+ months</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Stipend Range</label>
+                    <select id="stipend-filter">
+                        <option value="">All Ranges</option>
+                        <option value="0-10000">₹0 - ₹10,000</option>
+                        <option value="10000-20000">₹10,000 - ₹20,000</option>
+                        <option value="20000-30000">₹20,000 - ₹30,000</option>
+                        <option value="30000+">₹30,000+</option>
+                    </select>
+                </div>
+
+                <button class="clear-filters-btn" onclick="clearFilters()">
+                    <i class="fas fa-times"></i>
+                    Clear Filters
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section">
+        <div class="container">
+            <div class="results-header">
+                <div class="results-count">
+                    <h3 id="results-count">Showing 0 internships</h3>
+                </div>
+                <div class="sort-options">
+                    <label>Sort by:</label>
+                    <select id="sort-select" onchange="sortInternships()">
+                        <option value="relevance">Relevance</option>
+                        <option value="newest">Newest First</option>
+                        <option value="deadline">Application Deadline</option>
+                        <option value="stipend">Stipend (High to Low)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="results-grid" id="results-grid">
+                <!-- Internship cards will be dynamically inserted here -->
+            </div>
+
+            <div class="no-results" id="no-results" style="display: none;">
+                <div class="no-results-content">
+                    <i class="fas fa-search"></i>
+                    <h3>No internships found</h3>
+                    <p>Try adjusting your search criteria or filters</p>
+                    <button class="btn btn-primary" onclick="clearFilters()">Clear All Filters</button>
+                </div>
+            </div>
+
+            <div class="load-more-container">
+                <button class="btn btn-secondary" id="load-more-btn" onclick="loadMoreInternships()">
+                    <i class="fas fa-plus"></i>
+                    Load More Internships
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Bharat Internz</h3>
+                    <p>Connecting students with the best internship opportunities across India.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="internships.html">Browse Internships</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="#">Technology</a></li>
+                        <li><a href="#">Marketing</a></li>
+                        <li><a href="#">Design</a></li>
+                        <li><a href="#">Business</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Bharat Internz. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/internships.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
