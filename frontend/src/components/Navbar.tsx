@@ -1,34 +1,69 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Briefcase, Search, Menu } from "lucide-react";
+import { Search, Menu, LogIn, UserPlus } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    
+    // Check on initial load
+    handleScroll();
+    
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  
+  // Decide whether navbar should be transparent or solid white based on page and scroll
+  const isDarkArea = pathname === "/" || pathname === "/about";
+  const isTransparent = isDarkArea && !scrolled;
+
+  const navBgClass = isTransparent 
+    ? "bg-transparent border-transparent" 
+    : "bg-white/95 backdrop-blur-md border-slate-200 shadow-sm";
+    
+  const textClass = isTransparent 
+    ? "text-slate-200 hover:text-white" 
+    : "text-slate-600 hover:text-[#6338EE]";
+    
+  const logoClass = "bg-clip-text text-transparent bg-gradient-to-r from-[#6338EE] to-[#8b5cf6]";
+
   return (
-    <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-slate-200 z-50">
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 border-b ${navBgClass}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
-              Bharat Internz
+        <div className="flex justify-between items-center h-20">
+          
+          {/* Logo */}
+          <div className="flex-shrink-0 flex items-center gap-2">
+            <Link href="/" className={`text-2xl font-bold tracking-tight ${logoClass}`}>
+              CareerSync
             </Link>
           </div>
           
-          <div className="hidden md:flex space-x-8 items-center">
-            <Link href="/" className="text-slate-600 hover:text-indigo-600 font-medium transition-colors">
-              Home
+          {/* Main Links */}
+          <div className="hidden md:flex space-x-6 items-center">
+            <Link href="/internships" className={`font-medium transition-colors ${textClass}`}>
+              Find Internships
             </Link>
-            <Link href="/internships" className="text-slate-600 hover:text-indigo-600 font-medium transition-colors">
-              Browse Internships
-            </Link>
-            <Link href="#about" className="text-slate-600 hover:text-indigo-600 font-medium transition-colors">
+            <Link href="/about" className={`font-medium transition-colors ${textClass}`}>
               About
             </Link>
-            <Link href="#contact" className="text-slate-600 hover:text-indigo-600 font-medium transition-colors">
+            <Link href="/contact" className={`font-medium transition-colors ${textClass}`}>
               Contact
             </Link>
           </div>
 
+          {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
-            <button className="text-slate-600 hover:text-indigo-600 focus:outline-none">
+            <button className={`focus:outline-none ${isTransparent ? 'text-white' : 'text-slate-600'}`}>
               <Menu className="h-6 w-6" />
             </button>
           </div>

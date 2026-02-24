@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Bharat Internz - Find Your Dream Internship",
+  title: "CareerSync - Find Your Dream Internship",
   description: "Discover thousands of internship opportunities from top companies across India.",
 };
 

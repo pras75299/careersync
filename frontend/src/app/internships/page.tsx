@@ -195,54 +195,64 @@ export default function InternshipsPage() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="flex flex-col gap-4">
             {filtered.map(job => (
-              <Link href={`/internships/${job.id}`} key={job.id} className="group bg-white rounded-xl p-6 border border-slate-100 shadow-[0_2px_10px_rgb(0,0,0,0.04)] hover:shadow-[0_10px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-md">
+              <div key={job.id} className="bg-white rounded-2xl p-6 border border-slate-200 shadow-[0_2px_10px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:border-indigo-100 transition-all duration-300 flex flex-col sm:flex-row gap-6 relative">
+                
+                {/* Left: Brand Logo Block */}
+                <div className="flex-shrink-0">
+                  <div className="w-20 h-20 bg-[#6338EE] rounded-3xl flex items-center justify-center text-white font-bold text-3xl shadow-sm">
                     {job.company.charAt(0)}
                   </div>
-                  <span className="bg-green-50 text-green-700 text-xs font-semibold px-2.5 py-1 rounded-full border border-green-200">
-                    New
-                  </span>
                 </div>
                 
-                <h3 className="text-lg font-bold text-slate-800 mb-1 group-hover:text-indigo-600 transition-colors line-clamp-2">
-                  {job.title}
-                </h3>
-                <p className="text-slate-500 font-medium text-sm mb-4">{job.company}</p>
-                
-                <div className="flex flex-wrap gap-y-2 gap-x-4 mb-4 text-xs font-medium text-slate-600">
-                  {job.location && (
-                    <div className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                      <span className="truncate max-w-[120px]">{job.location}</span>
-                    </div>
-                  )}
-                  {job.job_type && (
-                    <div className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md">
-                      <Briefcase className="w-3.5 h-3.5 text-slate-400" />
-                      <span className="capitalize">{job.job_type.replace(/_/g, " ")}</span>
-                    </div>
-                  )}
-                  {job.stipend && (
-                    <div className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md">
-                      <IndianRupee className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{job.stipend}</span>
-                    </div>
-                  )}
+                {/* Middle: Job Info */}
+                <div className="flex-grow flex flex-col justify-center">
+                  <h3 className="text-[22px] font-bold text-[#1a1a1a] mb-1 hover:text-[#6338EE] transition-colors leading-tight">
+                    <Link href={`/internships/${job.id}`}>
+                      {job.title}
+                    </Link>
+                  </h3>
+                  <p className="text-[#64748b] text-[17px] font-medium mb-4">{job.company}</p>
+                  
+                  <div className="flex flex-wrap gap-2 text-sm font-medium text-[#64748b]">
+                    {job.location && (
+                      <div className="flex items-center gap-1.5 bg-[#f8fafc] px-3 py-1.5 rounded-lg border border-[#f1f5f9]">
+                        <MapPin className="w-4 h-4 text-[#94a3b8]" />
+                        <span>{job.location}</span>
+                      </div>
+                    )}
+                    {job.job_type && (
+                      <div className="flex items-center gap-1.5 bg-[#f8fafc] px-3 py-1.5 rounded-lg border border-[#f1f5f9]">
+                        <Briefcase className="w-4 h-4 text-[#94a3b8]" />
+                        <span className="capitalize">{job.job_type.replace(/_/g, " ")}</span>
+                      </div>
+                    )}
+                    {job.stipend && (
+                      <div className="flex items-center gap-1.5 bg-[#f8fafc] px-3 py-1.5 rounded-lg border border-[#f1f5f9]">
+                        <IndianRupee className="w-4 h-4 text-[#94a3b8]" />
+                        <span>{job.stipend}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                <div className="mt-auto pt-4 border-t border-slate-50 flex items-center justify-between">
-                  <span className="text-xs text-slate-400 flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5" />
-                    {new Date(job.created_at).toLocaleDateString()}
-                  </span>
-                  <span className="text-indigo-600 font-semibold text-sm group-hover:underline">
-                    View Details
-                  </span>
+                {/* Right: Actions */}
+                <div className="flex flex-row sm:flex-col sm:items-end justify-between gap-3 sm:ml-auto w-full sm:w-auto mt-4 sm:mt-0 pt-4 sm:pt-0 border-t border-slate-100 sm:border-0">
+                  <div className="flex gap-3 mt-auto">
+                    <button className="flex items-center gap-2 bg-white border border-[#e2e8f0] text-[#475569] hover:text-[#0f172a] hover:bg-[#f8fafc] font-medium px-5 py-2.5 rounded-xl transition-all h-[44px]">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+                      Save
+                    </button>
+                    <Link href={`/internships/${job.id}`}>
+                      <button className="flex items-center gap-2 bg-[#6338EE] hover:bg-[#5225D6] text-white font-medium px-6 py-2.5 rounded-xl shadow-sm transition-all h-[44px]">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                        Apply Now
+                      </button>
+                    </Link>
+                  </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         )}
