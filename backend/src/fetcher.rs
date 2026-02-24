@@ -5,11 +5,12 @@ use sqlx::PgPool;
 use std::time::Duration;
 use tokio::time::sleep;
 use uuid::Uuid;
-use chrono::{DateTime, Utc, TimeZone};
+use chrono::{DateTime, Utc};
 
 use crate::models::Internship;
 
 #[derive(Deserialize, Debug)]
+#[allow(dead_code)]
 struct RemotiveResponse {
     #[serde(rename = "job-count")]
     job_count: usize,
@@ -17,6 +18,7 @@ struct RemotiveResponse {
 }
 
 #[derive(Deserialize, Debug)]
+#[allow(dead_code)]
 struct RemotiveJob {
     id: u64,
     url: String,

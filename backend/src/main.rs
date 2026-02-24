@@ -9,9 +9,8 @@ use axum::{
 };
 use serde::Serialize;
 use sqlx::postgres::PgPoolOptions;
-use std::net::SocketAddr;
 use tower_http::{cors::{Any, CorsLayer}, trace::TraceLayer};
-use tracing::{info, error, Level};
+use tracing::{info, error};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 #[derive(Serialize)]
