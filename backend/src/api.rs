@@ -1,9 +1,11 @@
 use axum::{
-    extract::{Path, State},
+    extract::{Path, State, Query},
     routing::get,
     Json, Router,
 };
+use serde::Deserialize;
 use sqlx::PgPool;
+use tracing::error;
 use uuid::Uuid;
 
 use crate::models::Internship;
@@ -14,10 +16,19 @@ pub fn app_router() -> Router<PgPool> {
         .route("/internships/:id", get(get_internship))
 }
 
+#[derive(Deserialize)]
+pub struct InternshipFilter {
+    pub limit: Option<i64>,
+    pub offset: Option<i64>,
+}
+
 async fn list_internships(
     State(pool): State<PgPool>,
+    Query(filter): Query<InternshipFilter>,
 ) -> Result<Json<Vec<Internship>>, (axum::http::StatusCode, String)> {
-    // In reality, we'd add search/filter query params here. For now, just return all.
+    let limit = filter.limit.unwrap_or(50).min(100);
+    let offset = filter.offset.unwrap_or(0);
+
     let internships = sqlx::query_as::<_, Internship>(
         r#"
         SELECT id, title, company, location, job_type, duration, stipend,
@@ -25,14 +36,18 @@ async fn list_internships(
                created_at, application_deadline
         FROM internships
         ORDER BY created_at DESC
+        LIMIT $1 OFFSET $2
         "#
     )
+    .bind(limit)
+    .bind(offset)
     .fetch_all(&pool)
     .await
     .map_err(|e| {
+        error!("Database error while listing internships: {}", e);
         (
             axum::http::StatusCode::INTERNAL_SERVER_ERROR,
-            format!("Database error: {}", e),
+            "Internal Server Error".into(),
         )
     })?;
 
@@ -56,9 +71,10 @@ async fn get_internship(
     .fetch_optional(&pool)
     .await
     .map_err(|e| {
+        error!("Database error while fetching internship {}: {}", id, e);
         (
             axum::http::StatusCode::INTERNAL_SERVER_ERROR,
-            format!("Database error: {}", e),
+            "Internal Server Error".into(),
         )
     })?;
 
