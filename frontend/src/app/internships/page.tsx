@@ -36,7 +36,8 @@ export default function InternshipsPage() {
     // For now we fetch all and filter on client side.
     const fetchInternships = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/internships");
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://careersync-x7oy.onrender.com";
+        const res = await fetch(`${API_URL}/api/internships`);
         if (res.ok) {
           const data = await res.json();
           setInternships(data);

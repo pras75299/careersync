@@ -33,7 +33,8 @@ export default function InternshipDetailPage() {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/api/internships/${id}`);
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://careersync-x7oy.onrender.com";
+        const res = await fetch(`${API_URL}/api/internships/${id}`);
         if (res.ok) {
           const data = await res.json();
           setJob(data);
