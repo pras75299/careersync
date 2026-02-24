@@ -60,6 +60,39 @@ async fn main() {
         }
     };
 
+    // Initialize the database schema if it doesn't exist automatically
+    info!("Ensuring database schema exists...");
+    match sqlx::query(
+        r#"
+        CREATE TABLE IF NOT EXISTS internships (
+            id UUID PRIMARY KEY,
+            title VARCHAR NOT NULL,
+            company VARCHAR NOT NULL,
+            location VARCHAR NOT NULL,
+            job_type VARCHAR NOT NULL,
+            duration VARCHAR NOT NULL,
+            stipend VARCHAR,
+            description TEXT NOT NULL,
+            html_description TEXT,
+            category VARCHAR NOT NULL,
+            tags TEXT[] NOT NULL DEFAULT '{}',
+            external_url VARCHAR,
+            created_at TIMESTAMPTZ NOT NULL,
+            application_deadline TIMESTAMPTZ,
+            UNIQUE(external_url)
+        );
+        "#
+    )
+    .execute(&pool)
+    .await
+    {
+        Ok(_) => info!("✅ Database schema validated."),
+        Err(e) => {
+            error!("❌ Failed to initialize database schema: {}", e);
+            return;
+        }
+    }
+
     // Spawn background fetcher
     fetcher::start_background_fetcher(pool.clone()).await;
 
@@ -75,7 +108,8 @@ async fn main() {
         .layer(TraceLayer::new_for_http())
         .layer(cors);
 
-    let addr = std::env::var("SERVER_ADDR").unwrap_or_else(|_| "127.0.0.1:8000".to_string());
+    let port = std::env::var("PORT").unwrap_or_else(|_| "8000".to_string());
+    let addr = std::env::var("SERVER_ADDR").unwrap_or_else(|_| format!("0.0.0.0:{}", port));
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
     info!("🚀 Server listening on {}", addr);
     
